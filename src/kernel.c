@@ -49,7 +49,7 @@ extern void println(char* arr) {
     io.y++;
 }
 
-void error(char* arr) {
+extern void error(char* arr) {
     char color = io.color;
     io.color = 0x0C;
     println(arr);

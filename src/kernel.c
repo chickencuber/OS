@@ -4,7 +4,7 @@
 #define false 0
 
 typedef char bool;
-typedef unsigned int uint;
+typedef unsigned long uint;
 
 //io
 static struct {
@@ -162,9 +162,36 @@ extern void free(void* ptr) {
     Allocator.fix_free(chunk);
 }
 
+extern void* realloc(void* ptr, uint size) {
+    bool init = false;
+    Chunk* chunk = &Allocator.chunk;
+    for(uint i = 0; i < Allocator.size; i++) {
+        if(chunk->ptr == ptr) {
+            if(chunk->free) {
+                error("Alloc Error: ptr not found\0");
+                return 0;
+            }
+            init = true;
+            break;
+        }
+        chunk = chunk->next;
+    }    
+    char* new = malloc(size);
+    uint _size = chunk->size;
+    for(uint i = 0; i < (size < _size ? size : _size); i++) {
+       new[i] = ((char*) ptr)[i]; 
+    }
+    free(ptr);
+    return new;
+}
+
 void test() {
-    char* c = malloc(1);    
+    char* c = malloc(2);    
+    c[0] = '!'; 
+    c[1] = '\0';
     print("Hello World!\0");
+    println(c);
+    free(c);
 }
 
 extern void main() {

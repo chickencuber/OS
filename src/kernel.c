@@ -189,7 +189,7 @@ void test() {
     char* c = malloc(2);    
     c[0] = '!'; 
     c[1] = '\0';
-    print("Hello World!\0");
+    print("Hello World\0");
     println(c);
     free(c);
 }
